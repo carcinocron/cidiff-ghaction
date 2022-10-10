@@ -3276,6 +3276,10 @@ async function main() {
       dist_path = core.getInput("dist_path")
     const context = github.context,
       pull_request = context.payload.pull_request
+    console.log('github.context.payload', github.context.payload)
+    console.log('github.context.payload.base', github.context.payload.base)
+    console.log('github.context.payload.base.repo', github.context.payload.base.repo)
+    console.log('github.context.payload.base.repo.id', github.context.payload.base.repo.id)
     console.log(github.context.payload.pull_request || github.context.payload)
 
     console.log(`==== Bootstrapping repo`)
@@ -3289,6 +3293,15 @@ async function main() {
     }
     const size1 = await cmd(`/bin/bash -c "du -abh ${dist_path} | tee /tmp/new_size.txt"`)
     core.setOutput("size", size1)
+    const send_size = await cmd(`/bin/bash -c "curl -v https://cidiff-bupezyolyq-ue.a.run.app/api/files -X POST \
+      -F repo_id=testrepoid2 \
+      -F repo_host=github \
+      -F commit=1234567890123456789012345678901234567890 \
+      -F duabh=@/tmp/new_size.txt \
+      -H 'Authorization: Bearer ${cidiff_account}:${cidiff_api_ket}'"`)
+    console.log(send_size)
+
+    
 
     await exec.exec(`rm -rf ${dist_path}/*`)
     await exec.exec(`git remote set-branches --add origin ${main_branch}`)
