@@ -1,6 +1,6 @@
 name: 'Compare JS Bundle size on PR'
 description: 'Compare JS bundle size to main branch on Pull Requests'
-author: 'sarthak-saxena'
+author: 'carcinocron'
 inputs:
   bootstrap:
     description: 'cli command for installing dependencies ex npm install'

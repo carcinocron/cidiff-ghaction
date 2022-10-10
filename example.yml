@@ -1,5 +1,8 @@
-# save this file as .github/workflows/build-size.yml
-name: Build Size
+# save this file as .github/workflows/cidiff.yml
+name: CIDIFF
+env:
+  CIDIFF_ACCOUNT: ${{ secrets.CIDIFF_ACCOUNT }}
+  CIDIFF_API_KEY: ${{ secrets.CIDIFF_API_KEY }}
 on:
   pull_request:
     types: ['opened', 'reopened', 'synchronize']
@@ -11,10 +14,12 @@ jobs:
       # - uses: actions/setup-node@v1
       #   with:
       #     node-version: '10.0.0'
-      - uses: carcinocron/JSBundleSize@main
+      - uses: carcinocron/cidiff-ghaction@main
         with:
           bootstrap: yarn install
           build_command: yarn run build
           dist_path: dist
+          cidiff_account: ${{ secrets.CIDIFF_ACCOUNT }}
+          cidiff_api_key: ${{ secrets.CIDIFF_API_KEY }}
           token: ${{ secrets.GITHUB_TOKEN }}
           main_branch: main

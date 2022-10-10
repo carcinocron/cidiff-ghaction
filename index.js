@@ -26,6 +26,10 @@ async function main() {
     console.log("==== Initializing oktokit with token", token)
     const octokit = new github.GitHub(token)
     // --------------- End octokit initialization ---------------
+    const cidiff_account = core.getInput("cidiff_account")
+    console.log("==== Initializing CIDIFF with cidiff_account", cidiff_account)
+    const cidiff_api_key = core.getInput("cidiff_api_key")
+    console.log("==== Initializing CIDIFF with cidiff_api_key", cidiff_api_key)
 
     // --------------- Build repo  ---------------
     const bootstrap = core.getInput("bootstrap"),
