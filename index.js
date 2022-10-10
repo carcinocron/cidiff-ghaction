@@ -38,10 +38,13 @@ async function main() {
       dist_path = core.getInput("dist_path")
     const context = github.context,
       pull_request = context.payload.pull_request
+    console.log('github', github)
+    console.log('github.context', github.context)
     console.log('github.context.payload', github.context.payload)
-    console.log('github.context.payload.base', github.context.payload.base)
-    console.log('github.context.payload.base.repo', github.context.payload.base.repo)
-    console.log('github.context.payload.base.repo.id', github.context.payload.base.repo.id)
+    console.log('github.context.payload.pull_request', github.context.payload.pull_request)
+    console.log('github.context.payload.pull_request.base', github.context.payload.pull_request.base)
+    console.log('github.context.payload.pull_request.base.repo', github.context.payload.pull_request.base.repo)
+    console.log('github.context.payload.pull_request.base.repo.id', github.context.payload.pull_request.base.repo.id)
     console.log(github.context.payload.pull_request || github.context.payload)
 
     console.log(`==== Bootstrapping repo`)
