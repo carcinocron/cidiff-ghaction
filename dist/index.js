@@ -3287,6 +3287,7 @@ async function main() {
     const repo_id = github.context.payload.pull_request.base.repo.id
     const repo_host = 'github'
     const commit = github.context.payload.pull_request.head.sha
+    const base_commit = github.context.payload.pull_request.base.sha
 
     console.log(`==== Bootstrapping repo`)
     await exec.exec(bootstrap)
@@ -3317,7 +3318,16 @@ async function main() {
     await exec.exec(build_command)
     core.setOutput("Building repo completed @ ", new Date().toTimeString())
     const size2 = await cmd(`/bin/bash -c "du -abh ${dist_path} | tee /tmp/old_size.txt"`)
-    core.setOutput("size", size2)
+    core.setOutput("size2", size2)
+
+    const send_size2 = await cmd(`/bin/bash -c "curl -v https://cidiff-bupezyolyq-ue.a.run.app/api/files -X POST \
+      -F repo_id=${repo_id} \
+      -F repo_host=${repo_host} \
+      -F commit=${github.context.payload.pull_request.base.sha} \
+      -F duabh=@/tmp/new_size.txt \
+      -H 'Authorization: Bearer ${cidiff_account}:${cidiff_api_key}'"`)
+    console.log(send_size2)
+
     const diff = await cmd(`/bin/bash -c "git diff -w /tmp/old_size.txt /tmp/new_size.txt || true"`)
 
     // const arrayOutput = sizeCalOutput.split("\n")
