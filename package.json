@@ -1,0 +1,37 @@
+{
+  "name": "cidiff-ghaction",
+  "version": "1.0.0",
+  "description": "cidiff-ghaction",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint index.js",
+    "package": "ncc build index.js -o dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carcinocron/cidiff-ghaction.git"
+  },
+  "keywords": [
+    "GitHub",
+    "Actions",
+    "JavaScript"
+  ],
+  "author": "GitHub",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/carcinocron/cidiff-ghaction/issues"
+  },
+  "homepage": "https://github.com/carcinocron/cidiff-ghaction#readme",
+  "dependencies": {
+    "@actions/core": "^1.1.1",
+    "@actions/exec": "^1.0.3",
+    "@actions/github": "^2.1.1",
+    "acorn": "^7.1.1",
+    "remove": "^0.1.5"
+  },
+  "devDependencies": {
+    "@zeit/ncc": "^0.20.5",
+    "eslint": "^6.3.0",
+    "git-diff": "^2.0.6"
+  }
+}
