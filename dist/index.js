@@ -3324,7 +3324,7 @@ async function main() {
       -F repo_id=${repo_id} \
       -F repo_host=${repo_host} \
       -F commit=${github.context.payload.pull_request.base.sha} \
-      -F duabh=@/tmp/new_size.txt \
+      -F duabh=@/tmp/old_size.txt \
       -H 'Authorization: Bearer ${cidiff_account}:${cidiff_api_key}'"`)
     console.log(send_size2)
 
