@@ -1,7 +1,10 @@
 const core = require("@actions/core")
 const exec = require("@actions/exec")
 const github = require("@actions/github")
+const axios = require('axios')
 // const gitDiff = require('git-diff')
+
+const CIDIFF_API = 'https://cidiff-bupezyolyq-ue.a.run.app/api'
 
 async function cmd (cmd) {
   const outputOptions = {}
@@ -48,8 +51,10 @@ async function main() {
     // console.log(github.context.payload.pull_request || github.context.payload)
     const repo_id = github.context.payload.pull_request.base.repo.id
     const repo_host = 'github'
-    const commit = github.context.payload.pull_request.head.sha
-    const base_commit = github.context.payload.pull_request.base.sha
+    // AKA current branch
+    const head_sha = github.context.payload.pull_request.head.sha
+    // AKA main branch
+    const base_sha = github.context.payload.pull_request.base.sha
 
     console.log(`==== Bootstrapping repo`)
     await exec.exec(bootstrap)
@@ -60,43 +65,33 @@ async function main() {
     if (pull_request && pull_request.base && pull_request.base.ref) {
       base_branch_name = pull_request.base.ref
     }
-    const size1 = await cmd(`/bin/bash -c "du -abh ${dist_path} | tee /tmp/new_size.txt"`)
+    const du_abh_output_file = '/tmp/du_abh.txt'
+    const size1 = await cmd(`/bin/bash -c "du -abh ${dist_path} | tee ${du_abh_output_file}"`)
     core.setOutput("size", size1)
-    const send_size = await cmd(`/bin/bash -c "curl -v https://cidiff-bupezyolyq-ue.a.run.app/api/files -X POST \
+    const send_size = await cmd(`/bin/bash -c "curl -v ${CIDIFF_API}/files -X POST \
       -F repo_id=${repo_id} \
       -F repo_host=${repo_host} \
-      -F commit=${commit} \
-      -F duabh=@/tmp/new_size.txt \
+      -F head_sha=${head_sha} \
+      -F du_abh=@${du_abh_output_file} \
+      -F duabh=@${du_abh_output_file} \
+      -F du_abh.txt=@${du_abh_output_file} \
       -H 'Authorization: Bearer ${cidiff_account}:${cidiff_api_key}'"`)
     console.log(send_size)
 
-    await exec.exec(`rm -rf ${dist_path}/*`)
-    await exec.exec(`git remote set-branches --add origin ${main_branch}`)
-    await exec.exec(`git fetch origin ${main_branch}:${main_branch}`)
-    await exec.exec(`git checkout ${main_branch}`)
-    console.log(`==== Bootstrapping repo`)
-    await exec.exec(bootstrap)
-    console.log(`==== Building Changes`)
-    await exec.exec(build_command)
-    core.setOutput("Building repo completed @ ", new Date().toTimeString())
-    const size2 = await cmd(`/bin/bash -c "du -abh ${dist_path} | tee /tmp/old_size.txt"`)
-    core.setOutput("size2", size2)
-
-    const send_size2 = await cmd(`/bin/bash -c "curl -v https://cidiff-bupezyolyq-ue.a.run.app/api/files -X POST \
-      -F repo_id=${repo_id} \
-      -F repo_host=${repo_host} \
-      -F commit=${github.context.payload.pull_request.base.sha} \
-      -F duabh=@/tmp/old_size.txt \
-      -H 'Authorization: Bearer ${cidiff_account}:${cidiff_api_key}'"`)
-    console.log(send_size2)
-
-    const diff = await cmd(`/bin/bash -c "git diff -w /tmp/old_size.txt /tmp/new_size.txt || true"`)
-
-    // const arrayOutput = sizeCalOutput.split("\n")
-    const body = "Bundled size for the package is listed below: \n\n```diff\n" + diff + "\n```\n"
-
     let result
     if (pull_request) {
+      const diffReport = await axios.get(`${CIDIFF_API}/filediffreport`, {
+        params: {
+          repo_id,
+          repo_host,
+          head_sha,
+          base_sha,
+        },
+      })
+      console.log('diffReport', diffReport)
+
+      // const body = makePullRequestBody(diffReport)
+      const body = "Bundled size for the package is listed below: \n\n```diff\n" + 'diff' + "\n```\n"
       // on pull request commit push add comment to pull request
       result = await octokit.issues.createComment(
         Object.assign(Object.assign({}, context.repo), {
@@ -105,13 +100,14 @@ async function main() {
         })
       )
     } else {
+      throw new Error('no defined behavior for commit, expected pull_request');
       // on commit push add comment to commit
-      result = await octokit.repos.createCommitComment(
-        Object.assign(Object.assign({}, context.repo), {
-          commit_sha: github.context.sha,
-          body,
-        })
-      )
+      // result = await octokit.repos.createCommitComment(
+      //   Object.assign(Object.assign({}, context.repo), {
+      //     commit_sha: github.context.sha,
+      //     body,
+      //   })
+      // )
     }
     // console.log({ result })
 
@@ -120,6 +116,10 @@ async function main() {
     console.error(error)
     core.setFailed(error.message)
   }
+}
+
+function makePullRequestBody(diffReport) {
+
 }
 
 main()

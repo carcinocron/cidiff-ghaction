@@ -27,6 +27,7 @@
     "@actions/exec": "^1.0.3",
     "@actions/github": "^2.1.1",
     "acorn": "^7.1.1",
+    "axios": "^1.1.2",
     "remove": "^0.1.5"
   },
   "devDependencies": {
