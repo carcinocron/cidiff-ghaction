@@ -4203,6 +4203,9 @@ async function main() {
           head_sha,
           base_sha,
         },
+        headers: {
+          Authorization: `Bearer ${cidiff_account}:${cidiff_api_key}`,
+        },
       })
       console.log('diffReport', diffReport)
 
