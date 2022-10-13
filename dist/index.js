@@ -4156,6 +4156,8 @@ async function main() {
     const main_branch = core.getInput("main_branch") || 'main'
     const dist_path = core.getInput("dist_path")
     const context = github.context
+    const eventName = context.eventName
+    console.log('eventName', eventName)
     const pull_request = context.payload.pull_request
     // console.log('github', github)
     console.log('github.context', context)
