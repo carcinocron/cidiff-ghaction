@@ -4157,13 +4157,13 @@ async function main() {
       dist_path = core.getInput("dist_path")
     const context = github.context,
       pull_request = context.payload.pull_request
-    console.log('github', github)
-    console.log('github.context', github.context)
-    console.log('github.context.payload', github.context.payload)
-    console.log('github.context.payload.pull_request', github.context.payload.pull_request)
-    console.log('github.context.payload.pull_request.base', github.context.payload.pull_request.base)
-    console.log('github.context.payload.pull_request.base.repo', github.context.payload.pull_request.base.repo)
-    console.log('github.context.payload.pull_request.base.repo.id', github.context.payload.pull_request.base.repo.id)
+    // console.log('github', github)
+    // console.log('github.context', github.context)
+    // console.log('github.context.payload', github.context.payload)
+    // console.log('github.context.payload.pull_request', github.context.payload.pull_request)
+    // console.log('github.context.payload.pull_request.base', github.context.payload.pull_request.base)
+    // console.log('github.context.payload.pull_request.base.repo', github.context.payload.pull_request.base.repo)
+    // console.log('github.context.payload.pull_request.base.repo.id', github.context.payload.pull_request.base.repo.id)
     // console.log(github.context.payload.pull_request || github.context.payload)
     const repo_id = github.context.payload.pull_request.base.repo.id
     const repo_host = 'github'
@@ -4188,11 +4188,9 @@ async function main() {
       -F repo_id=${repo_id} \
       -F repo_host=${repo_host} \
       -F head_sha=${head_sha} \
-      -F du_abh=@${du_abh_output_file} \
-      -F duabh=@${du_abh_output_file} \
       -F du_abh.txt=@${du_abh_output_file} \
       -H 'Authorization: Bearer ${cidiff_account}:${cidiff_api_key}'"`)
-    console.log(send_size)
+    // console.log(send_size)
 
     let result
     if (pull_request) {

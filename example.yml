@@ -1,8 +1,5 @@
 # save this file as .github/workflows/cidiff.yml
 name: CIDIFF
-env:
-  CIDIFF_ACCOUNT: ${{ secrets.CIDIFF_ACCOUNT }}
-  CIDIFF_API_KEY: ${{ secrets.CIDIFF_API_KEY }}
 on:
   pull_request:
     types: ['opened', 'reopened', 'synchronize']
