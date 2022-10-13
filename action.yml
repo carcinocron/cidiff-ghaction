@@ -1,5 +1,5 @@
 name: 'CIDIFF'
-description: 'Compare PR build size against main\'s build size.'
+description: "Compare PR build size against main's build size."
 author: 'carcinocron'
 inputs:
   bootstrap:
