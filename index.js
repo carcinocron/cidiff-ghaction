@@ -82,6 +82,7 @@ async function main() {
     if (pull_request) {
       const diffReport = await axios.get(`${CIDIFF_API}/filediffreport`, {
         params: {
+          type: 'pull_request',
           repo_id,
           repo_host,
           head_sha,
@@ -99,7 +100,7 @@ async function main() {
       result = await octokit.issues.createComment(
         Object.assign(Object.assign({}, context.repo), {
           issue_number: pull_request.number,
-          body,
+          body: diffReport.data.body_md,
         })
       )
     } else {
@@ -122,7 +123,10 @@ async function main() {
 }
 
 function makePullRequestBody(diffReport) {
+  let body = ''
+  for (const key of diffReport) {
 
+  }
 }
 
 main()

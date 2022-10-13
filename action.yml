@@ -1,5 +1,5 @@
-name: 'Compare JS Bundle size on PR'
-description: 'Compare JS bundle size to main branch on Pull Requests'
+name: 'CIDIFF'
+description: 'Compare PR build size against main\'s build size.'
 author: 'carcinocron'
 inputs:
   bootstrap:
@@ -18,12 +18,18 @@ inputs:
     description: 'if not a PR, the branch to compare to'
     required: true
     default: 'main'
+  cidiff_account:
+    description: 'The ID of your CIDIFF account'
+    required: true
+  cidiff_api_key:
+    description: 'A valid API Key for your CIDIFF account'
+    required: true
 runs:
   using: 'node16'
   main: 'dist/index.js'
 outputs:
   size: # output will be available to future steps
-    description: 'Build Size'
+    description: 'CIDIFF'
 branding:
   icon: 'hard-drive'
   color: 'blue'
