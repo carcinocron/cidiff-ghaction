@@ -24,6 +24,9 @@ inputs:
   cidiff_api_key:
     description: 'A valid API Key for your CIDIFF account'
     required: true
+  token:
+    description: 'A valid API Key for your Github account with access to this repository'
+    required: true
 runs:
   using: 'node16'
   main: 'dist/index.js'
