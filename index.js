@@ -71,7 +71,7 @@ async function main() {
       base_branch_name = pull_request.base.ref
     }
     const du_abh_output_file = '/tmp/du_abh.txt'
-    const size1 = await cmd(`/bin/bash -c "du -abh ${dist_path} | tee ${du_abh_output_file}"`)
+    const size1 = await cmd(`/bin/bash -c "du -abh ${dist_path} | sort -k 2 | tee ${du_abh_output_file}"`)
     core.setOutput("size", size1)
     const send_size = await cmd(`/bin/bash -c "curl -v ${CIDIFF_API}/files -X POST \
       -F repo_id=${repo_id} \
