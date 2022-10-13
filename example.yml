@@ -1,8 +1,13 @@
 # save this file as .github/workflows/cidiff.yml
 name: CIDIFF
 on:
+  pull_request_target:
+    types: ['opened', 'reopened', 'synchronize']
+    branches: ['main']
   pull_request:
     types: ['opened', 'reopened', 'synchronize']
+  push:
+    branches: ['main']
 jobs:
   Build-Size:
     runs-on: ubuntu-latest
