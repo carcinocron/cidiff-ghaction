@@ -4161,12 +4161,8 @@ async function main() {
     console.log('github.context', context)
     console.log('github.pull_request', pull_request)
     // console.log('github.context.payload', github.context.payload)
-    // console.log('pull_request', pull_request)
-    // console.log('pull_request.base', pull_request.base)
-    // console.log('pull_request.base.repo', pull_request.base.repo)
-    // console.log('pull_request.base.repo.id', pull_request.base.repo.id)
-    // console.log(pull_request || github.context.payload)
-    const repo_id = pull_request ? pull_request.base.repo.id : (context.repository.id)
+    const repo_id = pull_request ? pull_request.base.repo.id : (context.payload.repository.id)
+    console.log('repo_id', repo_id)
     const repo_host = 'github'
     // AKA current branch
     const head_sha = (pull_request && pull_request.head) ? pull_request.head.sha : (context.sha)
