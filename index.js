@@ -42,8 +42,8 @@ async function main() {
     const context = github.context
     const pull_request = context.payload.pull_request
     // console.log('github', github)
-    console.log('github.context', github.context)
-    console.log('github.pull_request', github.pull_request)
+    console.log('github.context', context)
+    console.log('github.pull_request', pull_request)
     // console.log('github.context.payload', github.context.payload)
     // console.log('pull_request', pull_request)
     // console.log('pull_request.base', pull_request.base)
@@ -53,12 +53,14 @@ async function main() {
     const repo_id = pull_request.base.repo.id
     const repo_host = 'github'
     // AKA current branch
-    const head_sha = pull_request.head.sha
+    const head_sha = (pull_request && pull_request.head) ? pull_request.head.sha : (context.sha)
     // AKA main branch
-    const base_sha = pull_request.base.sha
+    const base_sha = (pull_request && pull_request.base) ? pull_request.base.sha : null
     console.log({
       'context.sha': context.sha,
       'pull_request.base.sha': pull_request ? pull_request.base.sha : null,
+      base_sha,
+      head_sha,
     })
 
     console.log(`==== Bootstrapping repo`)
@@ -107,7 +109,8 @@ async function main() {
         })
       )
     } else {
-      throw new Error('no defined behavior for commit, expected pull_request');
+      // no action necessary for commits
+      // throw new Error('no defined behavior for commit, expected pull_request');
       // on commit push add comment to commit
       // result = await octokit.repos.createCommitComment(
       //   Object.assign(Object.assign({}, context.repo), {
