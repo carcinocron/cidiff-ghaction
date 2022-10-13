@@ -50,7 +50,7 @@ async function main() {
     // console.log('pull_request.base.repo', pull_request.base.repo)
     // console.log('pull_request.base.repo.id', pull_request.base.repo.id)
     // console.log(pull_request || github.context.payload)
-    const repo_id = pull_request.base.repo.id
+    const repo_id = pull_request ? pull_request.base.repo.id : (context.repository.id)
     const repo_host = 'github'
     // AKA current branch
     const head_sha = (pull_request && pull_request.head) ? pull_request.head.sha : (context.sha)
