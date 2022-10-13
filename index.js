@@ -35,26 +35,31 @@ async function main() {
     console.log("==== Initializing CIDIFF with cidiff_api_key", cidiff_api_key)
 
     // --------------- Build repo  ---------------
-    const bootstrap = core.getInput("bootstrap"),
-      build_command = core.getInput("build_command"),
-      main_branch = core.getInput("main_branch") || 'main',
-      dist_path = core.getInput("dist_path")
-    const context = github.context,
-      pull_request = context.payload.pull_request
+    const bootstrap = core.getInput("bootstrap")
+    const build_command = core.getInput("build_command")
+    const main_branch = core.getInput("main_branch") || 'main'
+    const dist_path = core.getInput("dist_path")
+    const context = github.context
+    const pull_request = context.payload.pull_request
     // console.log('github', github)
-    // console.log('github.context', github.context)
+    console.log('github.context', github.context)
+    console.log('github.pull_request', github.pull_request)
     // console.log('github.context.payload', github.context.payload)
-    // console.log('github.context.payload.pull_request', github.context.payload.pull_request)
-    // console.log('github.context.payload.pull_request.base', github.context.payload.pull_request.base)
-    // console.log('github.context.payload.pull_request.base.repo', github.context.payload.pull_request.base.repo)
-    // console.log('github.context.payload.pull_request.base.repo.id', github.context.payload.pull_request.base.repo.id)
-    // console.log(github.context.payload.pull_request || github.context.payload)
-    const repo_id = github.context.payload.pull_request.base.repo.id
+    // console.log('pull_request', pull_request)
+    // console.log('pull_request.base', pull_request.base)
+    // console.log('pull_request.base.repo', pull_request.base.repo)
+    // console.log('pull_request.base.repo.id', pull_request.base.repo.id)
+    // console.log(pull_request || github.context.payload)
+    const repo_id = pull_request.base.repo.id
     const repo_host = 'github'
     // AKA current branch
-    const head_sha = github.context.payload.pull_request.head.sha
+    const head_sha = pull_request.head.sha
     // AKA main branch
-    const base_sha = github.context.payload.pull_request.base.sha
+    const base_sha = pull_request.base.sha
+    console.log({
+      'context.sha': context.sha,
+      'pull_request.base.sha': pull_request ? pull_request.base.sha : null,
+    })
 
     console.log(`==== Bootstrapping repo`)
     await exec.exec(bootstrap)
